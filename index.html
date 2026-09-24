@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b31">
+  <meta name="description" content="FactorGrad-GS samples structural gradients while retaining the exact image-space objective for efficient 3D Gaussian Splatting.">
+  <title>FactorGrad-GS — Project Page</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="FactorGrad-GS, back to top">
+        <span class="brand-mark" aria-hidden="true">F<span>·</span>G</span>
+        <span>FactorGrad-GS</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#visuals">Visuals</a>
+        <a href="#resources">Resources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="project-title">
+      <div class="container">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span> Anonymous research manuscript · 3D Gaussian Splatting</p>
+          <h1 id="project-title"><span>FactorGrad-GS</span><small>Exact-Primal Monte Carlo Structural Backpropagation for Efficient 3D Gaussian Splatting</small></h1>
+          <p class="hero-lede">Keep the structural loss value exact. Sample the structural gradient where it costs the most.</p>
+          <p class="hero-detail">FactorGrad-GS retains dense ℓ1 supervision and the exact D-SSIM forward value, while sampling D-SSIM derivatives across color channels and training iterations.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="assets/factorgrad-gs-paper.pdf" target="_blank" rel="noopener">Read paper <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="https://github.com/FACTORGRAD-GS/FactorGrad-GS-code" target="_blank" rel="noopener">View code <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <figure class="paper-figure hero-figure">
+          <a href="assets/teaser.png" target="_blank" rel="noopener" aria-label="Open full-size teaser figure">
+            <img src="assets/teaser.png" alt="Paper teaser comparing ground truth and Gaussian Splatting results, with training speedups across three datasets." width="1600" height="848" fetchpriority="high">
+          </a>
+          <figcaption>Qualitative comparison and end-to-end training speedup relative to 3DGS. Open the figure to inspect it at full size.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-metrics" aria-labelledby="speed-heading">
+      <div class="container">
+        <div class="section-heading compact-heading">
+          <p class="section-kicker">From the paper</p>
+          <h2 id="speed-heading">Training speedup over 3DGS</h2>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><strong>6.79<span>×</span></strong><span>Mip-NeRF 360</span></div>
+          <div class="metric"><strong>7.63<span>×</span></strong><span>Tanks &amp; Temples</span></div>
+          <div class="metric"><strong>12.81<span>×</span></strong><span>Deep Blending</span></div>
+        </div>
+        <p class="metric-note">These are total training speedups relative to 3DGS in the paper's comparison, not the incremental gain from structural-gradient sampling alone.</p>
+      </div>
+    </section>
+
+    <section class="section section-method" id="method" aria-labelledby="method-heading">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-kicker">Method</p>
+          <h2 id="method-heading">Exact forward, sampled backward</h2>
+          <p>One rendering pass supplies the image pair and the exact scalar loss. FactorGrad-GS spends fewer backward operations on structural terms while preserving dense ℓ1 gradients.</p>
+        </div>
+        <div class="method-grid">
+          <article class="method-card">
+            <span class="step-number">01 / Forward</span>
+            <h3>Preserve the objective</h3>
+            <p>Compute the full RGB structural value with a selective fused-SSIM path, so the host gate receives the exact scalar objective.</p>
+          </article>
+          <article class="method-card">
+            <span class="step-number">02 / Backward</span>
+            <h3>Sample structural derivatives</h3>
+            <p>Use inverse-probability-weighted color-channel and temporal sampling for D-SSIM derivatives, alongside dense ℓ1 supervision.</p>
+          </article>
+          <article class="method-card">
+            <span class="step-number">03 / Schedule</span>
+            <h3>Respect densification</h3>
+            <p>Use channel-only sampling during growth, restore full RGB after densification, then enable temporal sampling during late refinement.</p>
+          </article>
+        </div>
+        <figure class="paper-figure method-figure">
+          <a href="assets/backbone.png" target="_blank" rel="noopener" aria-label="Open full-size FactorGrad-GS method diagram">
+            <img src="assets/backbone.png" alt="FactorGrad-GS diagram showing exact RGB forward evaluation, channel and temporal sampling in the backward pass, and a densification-aware schedule." width="1600" height="1113" loading="lazy">
+          </a>
+          <figcaption>FactorGrad-GS training path and gradient budget. Open the diagram to inspect labels at full size.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-results" id="results" aria-labelledby="results-heading">
+      <div class="container">
+        <div class="results-layout">
+          <div class="section-heading">
+            <p class="section-kicker">Matched comparison</p>
+            <h2 id="results-heading">Lower wall time with a small mean quality decrease</h2>
+            <p>Under the paper's matched SkipGS protocol across 13 scenes and three fixed-seed executions, FactorGrad-GS reduces mean training time by about 3.9%.</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <caption>Matched SkipGS comparison, mean ± variation reported in the paper</caption>
+              <thead>
+                <tr><th scope="col">Method</th><th scope="col">PSNR ↑</th><th scope="col">SSIM ↑</th><th scope="col">LPIPS ↓</th><th scope="col">Time ↓</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">SkipGS</th><td>27.32 ± 0.02</td><td>0.8185 ± 0.0001</td><td>0.2569 ± 0.0001</td><td>2622.7 ± 17.7 s</td></tr>
+                <tr class="ours-row"><th scope="row">FactorGrad-GS</th><td>27.28 ± 0.02</td><td>0.8176 ± 0.0003</td><td>0.2578 ± 0.0001</td><td>2520.0 ± 16.8 s</td></tr>
+              </tbody>
+            </table>
+            <p class="table-note">The figures report the paper's matched protocol. PSNR and SSIM are higher-is-better; LPIPS and training time are lower-is-better.</p>
+          </div>
+        </div>
+        <figure class="paper-figure qualitative-figure">
+          <a href="assets/qualitative.png" target="_blank" rel="noopener" aria-label="Open full-size qualitative comparison">
+            <img src="assets/qualitative.png" alt="Cropped qualitative comparisons on Train and Playroom scenes across several 3D Gaussian Splatting methods." width="1600" height="949" loading="lazy">
+          </a>
+          <figcaption>Selected qualitative comparisons from the manuscript.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-visuals" id="visuals" aria-labelledby="visuals-heading">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-kicker">Visual evidence</p>
+          <h2 id="visuals-heading">See the rendered views</h2>
+          <p>Five representative scenes place ground truth on the left while the right side alternates between SkipGS and FactorGrad-GS. The still comparison below also includes close-up views.</p>
+        </div>
+        <div class="blink-grid">
+          <figure class="blink-card"><img src="assets/blink/playroom_00018.gif" width="904" height="331" alt="Playroom: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Playroom</figcaption></figure>
+          <figure class="blink-card"><img src="assets/blink/flowers_00020.gif" width="904" height="330" alt="Flowers: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Flowers</figcaption></figure>
+          <figure class="blink-card"><img src="assets/blink/train_00007.gif" width="904" height="286" alt="Train: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Train</figcaption></figure>
+          <figure class="blink-card"><img src="assets/blink/room_00035.gif" width="904" height="334" alt="Room: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Room</figcaption></figure>
+          <figure class="blink-card"><img src="assets/blink/drjohnson_00017.gif" width="904" height="330" alt="Dr Johnson: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Dr Johnson</figcaption></figure>
+        </div>
+        <p class="visual-note">Scenes are from Mip-NeRF 360, Tanks &amp; Temples, and Deep Blending. Dataset and baseline citations are listed in the manuscript.</p>
+
+        <div class="comparison" aria-labelledby="comparison-heading">
+          <div class="comparison-heading">
+            <div>
+              <p class="section-kicker">Frame comparison</p>
+              <h3 id="comparison-heading">Inspect a scene</h3>
+            </div>
+            <div class="view-switch" role="group" aria-label="Image view">
+              <button type="button" class="is-active" data-view="full" aria-pressed="true">Full frame</button>
+              <button type="button" data-view="zoom" aria-pressed="false">Close-up</button>
+            </div>
+          </div>
+          <div class="scene-switch" role="group" aria-label="Scene">
+            <button type="button" class="is-active" data-scene="playroom_00018" aria-pressed="true">Playroom</button>
+            <button type="button" data-scene="flowers_00020" aria-pressed="false">Flowers</button>
+            <button type="button" data-scene="train_00007" aria-pressed="false">Train</button>
+            <button type="button" data-scene="room_00035" aria-pressed="false">Room</button>
+            <button type="button" data-scene="drjohnson_00017" aria-pressed="false">Dr Johnson</button>
+          </div>
+          <div class="comparison-grid" aria-live="polite">
+            <figure><div class="comparison-image"><img id="view-gt" src="assets/gallery/playroom_00018_gt_full.png" alt="Playroom ground truth, full frame." loading="lazy"></div><figcaption>Ground truth</figcaption></figure>
+            <figure><div class="comparison-image"><img id="view-skipgs" src="assets/gallery/playroom_00018_skipgs_full.png" alt="Playroom SkipGS rendering, full frame." loading="lazy"></div><figcaption>SkipGS</figcaption></figure>
+            <figure><div class="comparison-image"><img id="view-ours" src="assets/gallery/playroom_00018_factorgrad_gs_full.png" alt="Playroom FactorGrad-GS rendering, full frame." loading="lazy"></div><figcaption>FactorGrad-GS</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-resources" id="resources" aria-labelledby="resources-heading">
+      <div class="container resources-inner">
+        <div>
+          <p class="section-kicker">Resources</p>
+          <h2 id="resources-heading">Explore the work</h2>
+          <p>Read the manuscript or use the source repository for implementation and reproduction instructions.</p>
+        </div>
+        <div class="resource-links">
+          <a class="button button-primary" href="assets/factorgrad-gs-paper.pdf" target="_blank" rel="noopener">Paper (PDF) <span aria-hidden="true">↗</span></a>
+          <a class="button button-outline" href="https://github.com/FACTORGRAD-GS/FactorGrad-GS-code" target="_blank" rel="noopener">Source code <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner"><span>FactorGrad-GS</span><span>Anonymous manuscript · Research project page</span></div>
+  </footer>
+</body>
+</html>
