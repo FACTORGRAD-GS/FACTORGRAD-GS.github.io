@@ -22,6 +22,7 @@
         <a href="#method">Method</a>
         <a href="#results">Results</a>
         <a href="#visuals">Visuals</a>
+        <a href="#viewer">3D viewer</a>
         <a href="#resources">Resources</a>
       </nav>
     </div>
@@ -37,14 +38,14 @@
           <p class="hero-detail">FactorGrad-GS retains dense ℓ1 supervision and the exact D-SSIM forward value, while sampling D-SSIM derivatives across color channels and training iterations.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="assets/factorgrad-gs-paper.pdf" target="_blank" rel="noopener">Read paper <span aria-hidden="true">↗</span></a>
-            <a class="button button-secondary" href="https://github.com/FACTORGRAD-GS/FactorGrad-GS-code" target="_blank" rel="noopener">View code <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="https://github.com/FACTORGRAD-GS/FactorGrad-GS" target="_blank" rel="noopener">View code <span aria-hidden="true">↗</span></a>
           </div>
         </div>
         <figure class="paper-figure hero-figure">
-          <a href="assets/teaser.png" target="_blank" rel="noopener" aria-label="Open full-size teaser figure">
-            <img src="assets/teaser.png" alt="Paper teaser comparing ground truth and Gaussian Splatting results, with training speedups across three datasets." width="1600" height="848" fetchpriority="high">
+          <a href="assets/teaser-highlight.svg" target="_blank" rel="noopener" aria-label="Open full-size teaser figure">
+            <img src="assets/teaser-highlight.svg" alt="Flowers comparison with white dashed detail boxes outlined by a dark halo, novel views, and training speedups." width="1000" height="565" fetchpriority="high">
           </a>
-          <figcaption>Qualitative comparison and end-to-end training speedup relative to 3DGS. Open the figure to inspect it at full size.</figcaption>
+          <figcaption>Latest Figure 1 from the manuscript. White dashed detail boxes use a dark halo so the highlighted differences remain visible on both bright and dark regions.</figcaption>
         </figure>
       </div>
     </section>
@@ -121,9 +122,9 @@
         </div>
         <figure class="paper-figure qualitative-figure">
           <a href="assets/qualitative.png" target="_blank" rel="noopener" aria-label="Open full-size qualitative comparison">
-            <img src="assets/qualitative.png" alt="Cropped qualitative comparisons on Train and Playroom scenes across several 3D Gaussian Splatting methods." width="1600" height="949" loading="lazy">
+            <img src="assets/qualitative.png" alt="Latest qualitative comparison from the manuscript, with aligned views and close-up crops across Gaussian Splatting methods." width="1600" height="949" loading="lazy">
           </a>
-          <figcaption>Selected qualitative comparisons from the manuscript.</figcaption>
+          <figcaption>Selected qualitative comparisons from the latest manuscript PDF.</figcaption>
         </figure>
       </div>
     </section>
@@ -132,17 +133,25 @@
       <div class="container">
         <div class="section-heading">
           <p class="section-kicker">Visual evidence</p>
-          <h2 id="visuals-heading">See the rendered views</h2>
-          <p>Five representative scenes place ground truth on the left while the right side alternates between SkipGS and FactorGrad-GS. The still comparison below also includes close-up views.</p>
+          <h2 id="visuals-heading">Browse every evaluated scene</h2>
+          <p>Each scene below is a lightweight 360-degree GIF rendered with FactorGrad-GS. Use the frame comparison to inspect matched views and close-up crops for five representative scenes.</p>
         </div>
-        <div class="blink-grid">
-          <figure class="blink-card"><img src="assets/blink/playroom_00018.gif" width="904" height="331" alt="Playroom: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Playroom</figcaption></figure>
-          <figure class="blink-card"><img src="assets/blink/flowers_00020.gif" width="904" height="330" alt="Flowers: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Flowers</figcaption></figure>
-          <figure class="blink-card"><img src="assets/blink/train_00007.gif" width="904" height="286" alt="Train: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Train</figcaption></figure>
-          <figure class="blink-card"><img src="assets/blink/room_00035.gif" width="904" height="334" alt="Room: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Room</figcaption></figure>
-          <figure class="blink-card"><img src="assets/blink/drjohnson_00017.gif" width="904" height="330" alt="Dr Johnson: ground truth on the left, alternating SkipGS and FactorGrad-GS on the right." loading="lazy"><figcaption>Dr Johnson</figcaption></figure>
+        <div class="scene-grid">
+          <figure class="scene-card"><img src="assets/scenes/bicycle.gif" alt="Bicycle scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Bicycle</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/bonsai.gif" alt="Bonsai scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Bonsai</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/counter.gif" alt="Counter scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Counter</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/drjohnson.gif" alt="Dr Johnson scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Dr Johnson</strong><span>Deep Blending</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/flowers.gif" alt="Flowers scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Flowers</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/garden.gif" alt="Garden scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Garden</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/kitchen.gif" alt="Kitchen scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Kitchen</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/playroom.gif" alt="Playroom scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Playroom</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/room.gif" alt="Room scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Room</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/stump.gif" alt="Stump scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Stump</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/train.gif" alt="Train scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Train</strong><span>Tanks & Temples</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/treehill.gif" alt="Treehill scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Treehill</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/truck.gif" alt="Truck scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Truck</strong><span>Tanks & Temples</span></figcaption></figure>
         </div>
-        <p class="visual-note">Scenes are from Mip-NeRF 360, Tanks &amp; Temples, and Deep Blending. Dataset and baseline citations are listed in the manuscript.</p>
+        <p class="visual-note">The GIFs are derived from the supplied visualization renders and are loaded lazily so the page stays responsive.</p>
 
         <div class="comparison" aria-labelledby="comparison-heading">
           <div class="comparison-heading">
@@ -171,6 +180,22 @@
       </div>
     </section>
 
+    <section class="section section-viewer" id="viewer" aria-labelledby="viewer-heading">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-kicker">Interactive scenes</p>
+          <h2 id="viewer-heading">Three scenes selected for a 3D viewer</h2>
+          <p>Flowers, Playroom, and Room are prepared as the first viewer targets. The page is ready for drag-to-orbit and scroll-to-zoom once the corresponding binary point-cloud assets are added.</p>
+        </div>
+        <div class="viewer-grid">
+          <article class="viewer-card"><div class="viewer-preview"><img src="assets/scenes/flowers.gif" alt="Flowers preview for the interactive 3D viewer." loading="lazy"><span class="viewer-badge">Asset pending</span></div><div class="viewer-card-copy"><h3>Flowers</h3><p>Waiting for a real binary PLY, GLB, SPLAT, or SPZ file.</p></div></article>
+          <article class="viewer-card"><div class="viewer-preview"><img src="assets/scenes/playroom.gif" alt="Playroom preview for the interactive 3D viewer." loading="lazy"><span class="viewer-badge">Asset pending</span></div><div class="viewer-card-copy"><h3>Playroom</h3><p>Waiting for a real binary PLY, GLB, SPLAT, or SPZ file.</p></div></article>
+          <article class="viewer-card"><div class="viewer-preview"><img src="assets/scenes/room.gif" alt="Room preview for the interactive 3D viewer." loading="lazy"><span class="viewer-badge">Asset pending</span></div><div class="viewer-card-copy"><h3>Room</h3><p>Waiting for a real binary PLY, GLB, SPLAT, or SPZ file.</p></div></article>
+        </div>
+        <p class="viewer-note"><strong>Why the viewer is not active yet:</strong> the supplied files under the visualization folder are small text pointers to an unavailable Linux path rather than the actual point-cloud data. Replacing those pointers with real binary files will let this same section load an interactive viewer without changing the page layout.</p>
+      </div>
+    </section>
+
     <section class="section section-resources" id="resources" aria-labelledby="resources-heading">
       <div class="container resources-inner">
         <div>
@@ -180,7 +205,7 @@
         </div>
         <div class="resource-links">
           <a class="button button-primary" href="assets/factorgrad-gs-paper.pdf" target="_blank" rel="noopener">Paper (PDF) <span aria-hidden="true">↗</span></a>
-          <a class="button button-outline" href="https://github.com/FACTORGRAD-GS/FactorGrad-GS-code" target="_blank" rel="noopener">Source code <span aria-hidden="true">↗</span></a>
+          <a class="button button-outline" href="https://github.com/FACTORGRAD-GS/FactorGrad-GS" target="_blank" rel="noopener">Source code <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
