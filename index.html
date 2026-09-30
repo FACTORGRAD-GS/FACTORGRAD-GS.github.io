@@ -183,16 +183,30 @@
     <section class="section section-viewer" id="viewer" aria-labelledby="viewer-heading">
       <div class="container">
         <div class="section-heading">
-          <p class="section-kicker">Interactive scenes</p>
-          <h2 id="viewer-heading">Three scenes selected for a 3D viewer</h2>
-          <p>Flowers, Playroom, and Room are prepared as the first viewer targets. The page is ready for drag-to-orbit and scroll-to-zoom once the corresponding binary point-cloud assets are added.</p>
+          <p class="section-kicker">Interactive views</p>
+          <h2 id="viewer-heading">Drag through rendered viewpoints</h2>
+          <p>Drag left or right to move through 72 FactorGrad-GS viewpoints for Flowers, Playroom, and Room. Scroll to zoom and use the slider for precise frame selection.</p>
         </div>
-        <div class="viewer-grid">
-          <article class="viewer-card"><div class="viewer-preview"><img src="assets/scenes/flowers.gif" alt="Flowers preview for the interactive 3D viewer." loading="lazy"><span class="viewer-badge">Asset pending</span></div><div class="viewer-card-copy"><h3>Flowers</h3><p>Waiting for a real binary PLY, GLB, SPLAT, or SPZ file.</p></div></article>
-          <article class="viewer-card"><div class="viewer-preview"><img src="assets/scenes/playroom.gif" alt="Playroom preview for the interactive 3D viewer." loading="lazy"><span class="viewer-badge">Asset pending</span></div><div class="viewer-card-copy"><h3>Playroom</h3><p>Waiting for a real binary PLY, GLB, SPLAT, or SPZ file.</p></div></article>
-          <article class="viewer-card"><div class="viewer-preview"><img src="assets/scenes/room.gif" alt="Room preview for the interactive 3D viewer." loading="lazy"><span class="viewer-badge">Asset pending</span></div><div class="viewer-card-copy"><h3>Room</h3><p>Waiting for a real binary PLY, GLB, SPLAT, or SPZ file.</p></div></article>
+        <div class="interactive-viewer" data-interactive-viewer>
+          <div class="interactive-toolbar">
+            <div class="viewer-scene-switch" role="tablist" aria-label="Interactive scene">
+              <button type="button" class="is-active" data-interactive-scene="flowers" role="tab" aria-selected="true">Flowers</button>
+              <button type="button" data-interactive-scene="playroom" role="tab" aria-selected="false">Playroom</button>
+              <button type="button" data-interactive-scene="room" role="tab" aria-selected="false">Room</button>
+            </div>
+            <span class="interactive-status" data-interactive-status aria-live="polite">Loading Flowers…</span>
+          </div>
+          <div class="interactive-stage">
+            <canvas id="interactive-canvas" width="960" height="632" tabindex="0" aria-label="Interactive Flowers rendered viewpoints"></canvas>
+            <span class="interactive-hint">Drag to rotate · Scroll to zoom · Arrow keys to step</span>
+          </div>
+          <div class="interactive-range-row">
+            <label for="interactive-slider">Viewpoint</label>
+            <input id="interactive-slider" type="range" min="0" max="71" value="0" step="1" aria-label="Select rendered viewpoint">
+            <output id="interactive-frame-label" for="interactive-slider">1 / 72</output>
+          </div>
         </div>
-        <p class="viewer-note"><strong>Why the viewer is not active yet:</strong> the supplied files under the visualization folder are small text pointers to an unavailable Linux path rather than the actual point-cloud data. Replacing those pointers with real binary files will let this same section load an interactive viewer without changing the page layout.</p>
+        <p class="viewer-note"><strong>What this is:</strong> a pre-rendered orbit made from the supplied 72-view FactorGrad-GS outputs. It gives the page the same drag-to-turn feel as the reference. It is not a free-camera 3DGS renderer; that requires the original binary point-cloud files, which are not present in the supplied folders.</p>
       </div>
     </section>
 
