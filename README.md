@@ -12,10 +12,18 @@ The site uses plain HTML, CSS and JavaScript, with no build step. All asset path
 are relative. The `assets/scenes/` directory contains the 13 supplied 360-degree
 GIFs. The `assets/interactive/` directory contains 72 compressed rendered views
 for Flowers, Playroom, and Room; the page lets visitors drag through these views,
-use the slider, and zoom the canvas.
+use the slider, and zoom the canvas. The `assets/interactive3d/` directory
+contains compact `.fgs` previews sampled from the supplied binary Gaussian PLYs;
+`splat-viewer.js` renders them with a dependency-free WebGL Gaussian point shader.
 
-This interaction is a pre-rendered orbit based on the supplied training-camera
-outputs. It is a useful visual substitute for the requested mouse-driven scene,
-but it is not a free-camera 3D Gaussian Splatting renderer. A true viewer can be
-enabled after adding binary Gaussian assets such as PLY, SPLAT, KSPLAT, SPZ, or
-SOG files; the current point-cloud files are text pointers rather than model data.
+The 3D previews keep positions, an isotropic radius, DC colour, and opacity so
+that the page remains small enough for GitHub Pages. Higher-order SH and rotation
+fields are omitted from the web preview only. The original PLYs are valid binary
+3DGS exports, but the Flowers source is over GitHub's 100 MiB per-file limit, so
+the raw files should be published as a Release asset or converted to SOG/SPZ/KSPLAT
+if full-fidelity distribution is needed. `tools/convert_ply_to_fgs.py` documents
+the deterministic conversion used for the three page previews.
+
+The page also includes an English **Supplementary Experiments** section that
+summarizes the reviewer follow-up campaign: P0 multi-seed robustness, IID
+sampling control, D-SSIM weight sensitivity, and a 2400px high-resolution subset.

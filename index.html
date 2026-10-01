@@ -9,6 +9,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="styles.css">
   <script src="site.js" defer></script>
+  <script src="splat-viewer.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -23,6 +24,7 @@
         <a href="#results">Results</a>
         <a href="#visuals">Visuals</a>
         <a href="#viewer">3D viewer</a>
+        <a href="#supplementary">Supplementary</a>
         <a href="#resources">Resources</a>
       </nav>
     </div>
@@ -104,7 +106,7 @@
           <div class="section-heading">
             <p class="section-kicker">Matched comparison</p>
             <h2 id="results-heading">Lower wall time with a small mean quality decrease</h2>
-            <p>Under the paper's matched SkipGS protocol across 13 scenes and three fixed-seed executions, FactorGrad-GS reduces mean training time by about 3.9%.</p>
+            <p>The manuscript's matched SkipGS table reports about 3.9% lower mean training time across 13 scenes and three fixed-seed executions. The reviewer follow-up below reports the exact 3.70% multi-seed campaign result.</p>
           </div>
           <div class="table-wrap">
             <table>
@@ -184,8 +186,28 @@
       <div class="container">
         <div class="section-heading">
           <p class="section-kicker">Interactive views</p>
-          <h2 id="viewer-heading">Drag through rendered viewpoints</h2>
-          <p>Drag left or right to move through 72 FactorGrad-GS viewpoints for Flowers, Playroom, and Room. Scroll to zoom and use the slider for precise frame selection.</p>
+          <h2 id="viewer-heading">Explore 3D Gaussian scenes</h2>
+          <p>Drag to orbit, use the wheel to zoom, and hold Shift while dragging to pan. These three compact previews are sampled from the supplied FactorGrad-GS PLY exports for responsive in-browser exploration.</p>
+        </div>
+        <div class="splat-viewer" data-splat-viewer>
+          <div class="splat-toolbar">
+            <div class="viewer-scene-switch" role="tablist" aria-label="3D Gaussian scene">
+              <button type="button" class="is-active" data-splat-scene="flowers" role="tab" aria-selected="true">Flowers</button>
+              <button type="button" data-splat-scene="playroom" role="tab" aria-selected="false">Playroom</button>
+              <button type="button" data-splat-scene="room" role="tab" aria-selected="false">Room</button>
+            </div>
+            <span class="interactive-status" data-splat-status aria-live="polite">Loading Flowers…</span>
+          </div>
+          <div class="splat-stage">
+            <canvas data-splat-canvas tabindex="0" aria-label="Interactive Flowers Gaussian scene"></canvas>
+            <span class="interactive-hint" data-splat-hint>Drag to orbit · Wheel to zoom · Shift + drag to pan</span>
+          </div>
+          <p class="splat-caption">The web preview keeps positions, Gaussian radius, DC colour, and opacity from the binary PLY and uses a deterministic point sample. Higher-order SH and rotations are omitted only for the compact page asset; the original PLY remains the source artifact.</p>
+        </div>
+        <div class="section-heading orbit-heading">
+          <p class="section-kicker">Rendered views</p>
+          <h3>Drag through rendered viewpoints</h3>
+          <p>For a pixel-faithful comparison, drag left or right through 72 FactorGrad-GS rendered viewpoints and use the slider for precise frame selection.</p>
         </div>
         <div class="interactive-viewer" data-interactive-viewer>
           <div class="interactive-toolbar">
@@ -206,7 +228,28 @@
             <output id="interactive-frame-label" for="interactive-slider">1 / 72</output>
           </div>
         </div>
-        <p class="viewer-note"><strong>What this is:</strong> a pre-rendered orbit made from the supplied 72-view FactorGrad-GS outputs. It gives the page the same drag-to-turn feel as the reference. It is not a free-camera 3DGS renderer; that requires the original binary point-cloud files, which are not present in the supplied folders.</p>
+        <p class="viewer-note"><strong>Data note:</strong> the supplied Flowers, Playroom, and Room PLYs are valid binary 3DGS files. The compact web assets are used here because the original Flowers PLY is over GitHub's 100 MiB per-file limit; the rendered orbit below is retained as a pixel-faithful fallback.</p>
+      </div>
+    </section>
+
+    <section class="section section-supplementary" id="supplementary" aria-labelledby="supplementary-heading">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-kicker">Reviewer follow-up</p>
+          <h2 id="supplementary-heading">Supplementary Experiments</h2>
+          <p>We reran the matched protocol to measure seed sensitivity, sampling-policy effects, D-SSIM weight sensitivity, and a small high-resolution subset. All runs use FastGS Base with SkipGS as the matched host, 30K iterations, densification interval 500, fixed train/test cameras, and the reported FactorGrad-GS schedule.</p>
+        </div>
+        <div class="supplementary-callout">
+          <strong>Multi-seed robustness (P0)</strong>
+          <p>Across 13 scenes and host seeds 42, 2026, and 3407, FactorGrad-GS reduces end-to-end wall time by <b>3.70%</b> (2526.94 vs. 2623.93 s) and CUDA time by <b>4.37%</b>, with near-unchanged FPS (+1.03) and a small quality trade-off (−0.0457 PSNR, −0.00054 SSIM, +0.00111 LPIPS). These results support a speed–quality trade-off rather than a claim of lossless acceleration.</p>
+        </div>
+        <div class="supplementary-grid">
+          <article class="supplementary-card"><h3>Multi-seed summary</h3><div class="table-wrap"><table><caption>P0 means over 13 scenes; ± is sample SD over three seeds.</caption><thead><tr><th>Method</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th>Wall time ↓</th></tr></thead><tbody><tr><th>SkipGS</th><td>27.32643 ± .01827</td><td>.818275 ± .000326</td><td>.257015 ± .000343</td><td>2623.93 ± 17.06 s</td></tr><tr class="ours-row"><th>FactorGrad-GS</th><td>27.28072 ± .00131</td><td>.817736 ± .000189</td><td>.258125 ± .000135</td><td><b>2526.94 ± 12.10 s</b></td></tr></tbody></table></div></article>
+          <article class="supplementary-card"><h3>Sampling-policy control</h3><p><b>IID vs. cycle:</b> +0.01188 PSNR, +0.000207 SSIM, −0.000139 LPIPS, and +0.80% time saving over the cycle policy across all 13 scenes. The control is consistent with nearly unchanged quality.</p><p class="card-note">The sign convention is “FactorGrad-GS minus the stated comparator”; positive time saving means lower wall time.</p></article>
+          <article class="supplementary-card"><h3>D-SSIM weight sensitivity</h3><table class="mini-table"><thead><tr><th>Setting</th><th>ΔPSNR</th><th>ΔSSIM</th><th>ΔLPIPS</th><th>Time saving</th></tr></thead><tbody><tr><th>λ<sub>D-SSIM</sub> = 0.3</th><td>+0.00310</td><td>−.000661</td><td>+.001656</td><td><b>+3.44%</b></td></tr><tr><th>λ<sub>D-SSIM</sub> = 0.5</th><td>−.10177</td><td>−.001345</td><td>+.003140</td><td><b>+2.34%</b></td></tr></tbody></table><p class="card-note">Both rows compare against the matched SkipGS baseline over all 13 scenes.</p></article>
+          <article class="supplementary-card"><h3>High-resolution subset</h3><p>At 2400 px on Bicycle, Kitchen, and Counter, FactorGrad-GS saves <b>5.18%</b> wall time with ΔPSNR −0.04934, ΔSSIM −0.000780, and ΔLPIPS +0.000993 versus SkipGS.</p><p class="card-note">This is a three-scene subset, so it should not be generalized to the full benchmark.</p></article>
+        </div>
+        <p class="supplementary-footnote">P0 quality, FPS, VRAM, and Gaussian-count entries are scene means; wall/CUDA time is summed over scenes. The complete reviewer protocol and detailed per-scene statistics are kept with the project records.</p>
       </div>
     </section>
 
