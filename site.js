@@ -87,9 +87,13 @@
     }
 
     function drawImage(image) {
+      if (canvas.width !== image.naturalWidth || canvas.height !== image.naturalHeight) {
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+      }
       const cw = canvas.width;
       const ch = canvas.height;
-      const scale = Math.max(cw / image.naturalWidth, ch / image.naturalHeight) * zoom;
+      const scale = zoom;
       const width = image.naturalWidth * scale;
       const height = image.naturalHeight * scale;
       ctx.fillStyle = '#102b31';

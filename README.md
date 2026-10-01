@@ -12,8 +12,10 @@ The site uses plain HTML, CSS and JavaScript, with no build step. All asset path
 are relative. The `assets/scenes/` directory contains the 13 supplied 360-degree
 GIFs. The `assets/interactive/` directory contains 72 compressed rendered views
 for Flowers, Playroom, and Room; the page lets visitors drag through these views,
-use the slider, and zoom the canvas. The `assets/interactive3d/` directory
-contains compact `.fgs` previews sampled from the supplied binary Gaussian PLYs;
+use the slider, and zoom the canvas. The source orbit frames are 480 px wide, so
+the canvas is displayed at native width to avoid enlarging low-resolution frames.
+The `assets/interactive3d/` directory
+contains compact `.fgs` previews converted from the supplied binary Gaussian PLYs;
 `splat-viewer.js` renders them with a dependency-free WebGL Gaussian point shader.
 The page presents the free-camera preview and the rendered orbit as two tabs in
 one interactive section; browsers without WebGL are switched to the rendered

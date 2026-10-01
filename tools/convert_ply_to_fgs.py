@@ -47,7 +47,7 @@ def read_gaussians(path: Path):
     opacity = 1.0 / (1.0 + np.exp(-np.clip(raw[:, index["opacity"]], -20.0, 20.0)))
     scale = np.exp(np.clip(raw[:, [index["scale_0"], index["scale_1"], index["scale_2"]]], -12.0, 8.0))
     radius = np.cbrt(np.maximum(scale[:, 0] * scale[:, 1] * scale[:, 2], 1e-18)).astype(np.float32)
-    # Give the painter a useful baseline for tiny Gaussians after downsampling.
+    # Give the painter a useful baseline for tiny Gaussians.
     radius = np.maximum(radius, np.float32(1e-4))
     return xyz, radius, rgb.astype(np.float32), opacity.astype(np.float32), count
 
@@ -55,7 +55,7 @@ def read_gaussians(path: Path):
 def convert(source: Path, target: Path, max_points: int, seed: int):
     xyz, radius, rgb, opacity, source_count = read_gaussians(source)
     rng = np.random.default_rng(seed)
-    if len(xyz) > max_points:
+    if max_points > 0 and len(xyz) > max_points:
         # Deterministic sampling preserves the whole scene while keeping page loads responsive.
         keep = np.sort(rng.choice(len(xyz), size=max_points, replace=False))
         xyz, radius, rgb, opacity = xyz[keep], radius[keep], rgb[keep], opacity[keep]
@@ -84,7 +84,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
     parser.add_argument("target", type=Path)
-    parser.add_argument("--max-points", type=int, default=180_000)
+    parser.add_argument("--max-points", type=int, default=0, help="maximum points; 0 keeps every Gaussian")
     parser.add_argument("--seed", type=int, default=3407)
     args = parser.parse_args()
     convert(args.source, args.target, args.max_points, args.seed)

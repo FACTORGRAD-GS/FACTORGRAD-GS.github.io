@@ -207,7 +207,7 @@
               <canvas data-splat-canvas tabindex="0" aria-label="Interactive Flowers Gaussian scene"></canvas>
               <span class="interactive-hint" data-splat-hint>Drag to orbit · Wheel to zoom · Shift + drag to pan</span>
             </div>
-            <p class="splat-caption">The web preview keeps positions, Gaussian radius, DC colour, and opacity from the binary PLY and uses a deterministic point sample. Higher-order SH and rotations are omitted only for the compact page asset; the original PLY remains the source artifact.</p>
+            <p class="splat-caption">The web preview keeps every point's position, Gaussian radius, DC colour, and opacity from the binary PLY. Higher-order SH and rotations are omitted only for the compact page asset; the original PLY remains the source artifact.</p>
           </div>
         </div>
         <div class="viewer-mode-panel" data-viewer-panel="orbit" hidden>
@@ -221,7 +221,7 @@
               <span class="interactive-status" data-interactive-status aria-live="polite">Loading Flowers…</span>
             </div>
             <div class="interactive-stage">
-              <canvas id="interactive-canvas" width="960" height="632" tabindex="0" aria-label="Interactive Flowers rendered viewpoints"></canvas>
+              <canvas id="interactive-canvas" width="480" height="316" tabindex="0" aria-label="Interactive Flowers rendered viewpoints"></canvas>
               <span class="interactive-hint">Drag to rotate · Scroll to zoom · Arrow keys to step</span>
             </div>
             <div class="interactive-range-row">
@@ -231,7 +231,7 @@
             </div>
           </div>
         </div>
-        <p class="viewer-note"><strong>Data note:</strong> the supplied Flowers, Playroom, and Room PLYs are valid binary 3DGS files. The compact web assets are used here because the original Flowers PLY is over GitHub's 100 MiB per-file limit. If WebGL is unavailable, the page automatically opens the rendered-orbit tab as a fallback.</p>
+        <p class="viewer-note"><strong>Image quality:</strong> the 3D tab is a lightweight preview of the supplied Gaussian PLYs; its simplified shading cannot match the manuscript renders. The rendered-orbit frames are 480 px wide, so this tab displays them at their native size instead of enlarging them into a blurry full-width image. If WebGL is unavailable, the page opens the rendered orbit automatically.</p>
       </div>
     </section>
 

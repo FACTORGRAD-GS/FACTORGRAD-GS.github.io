@@ -66,7 +66,7 @@
       vec4 viewPosition = u_view * vec4(a_position, 1.0);
       gl_Position = u_projection * viewPosition;
       float pointSize = u_pointScale * a_radius * u_viewport.y / max(0.0001, -viewPosition.z);
-      gl_PointSize = clamp(pointSize, 1.0, 64.0);
+      gl_PointSize = clamp(pointSize, 1.0, 48.0);
       v_color = a_color;
     }
   `;
@@ -77,7 +77,7 @@
       vec2 p = gl_PointCoord * 2.0 - 1.0;
       float r2 = dot(p, p);
       if (r2 > 1.0) discard;
-      float falloff = exp(-2.6 * r2);
+      float falloff = exp(-4.2 * r2);
       gl_FragColor = vec4(v_color.rgb, v_color.a * falloff);
     }
   `;
@@ -155,7 +155,7 @@
     gl.uniformMatrix4fv(locations.view, false, new Float32Array(view));
     gl.uniformMatrix4fv(locations.projection, false, new Float32Array(projection));
     gl.uniform2f(locations.viewport, canvas.width, canvas.height);
-    gl.uniform1f(locations.pointScale, state.extent * 0.92 * state.zoom);
+    gl.uniform1f(locations.pointScale, state.extent * 0.72 * state.zoom);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); gl.enableVertexAttribArray(locations.position); gl.vertexAttribPointer(locations.position, 3, gl.FLOAT, false, 16, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, radiusBuffer); gl.enableVertexAttribArray(locations.radius); gl.vertexAttribPointer(locations.radius, 1, gl.FLOAT, false, 4, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer); gl.enableVertexAttribArray(locations.color); gl.vertexAttribPointer(locations.color, 4, gl.UNSIGNED_BYTE, true, 4, 0);
