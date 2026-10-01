@@ -186,49 +186,52 @@
       <div class="container">
         <div class="section-heading">
           <p class="section-kicker">Interactive views</p>
-          <h2 id="viewer-heading">Explore 3D Gaussian scenes</h2>
-          <p>Drag to orbit, use the wheel to zoom, and hold Shift while dragging to pan. These three compact previews are sampled from the supplied FactorGrad-GS PLY exports for responsive in-browser exploration.</p>
+          <h2 id="viewer-heading">Explore the scenes</h2>
+          <p>Use the 3D Gaussian preview for free-camera exploration, or switch to the rendered orbit for a pixel-faithful 72-view comparison. Both views use the same Flowers, Playroom, and Room scenes.</p>
         </div>
-        <div class="splat-viewer" data-splat-viewer>
-          <div class="splat-toolbar">
-            <div class="viewer-scene-switch" role="tablist" aria-label="3D Gaussian scene">
-              <button type="button" class="is-active" data-splat-scene="flowers" role="tab" aria-selected="true">Flowers</button>
-              <button type="button" data-splat-scene="playroom" role="tab" aria-selected="false">Playroom</button>
-              <button type="button" data-splat-scene="room" role="tab" aria-selected="false">Room</button>
+        <div class="viewer-mode-switch" role="tablist" aria-label="Interactive scene view">
+          <button type="button" class="is-active" data-viewer-mode="splat" role="tab" aria-selected="true">3D Gaussian preview</button>
+          <button type="button" data-viewer-mode="orbit" role="tab" aria-selected="false">Rendered orbit</button>
+        </div>
+        <div class="viewer-mode-panel is-active" data-viewer-panel="splat">
+          <div class="splat-viewer" data-splat-viewer>
+            <div class="splat-toolbar">
+              <div class="viewer-scene-switch" role="tablist" aria-label="3D Gaussian scene">
+                <button type="button" class="is-active" data-splat-scene="flowers" role="tab" aria-selected="true">Flowers</button>
+                <button type="button" data-splat-scene="playroom" role="tab" aria-selected="false">Playroom</button>
+                <button type="button" data-splat-scene="room" role="tab" aria-selected="false">Room</button>
+              </div>
+              <span class="interactive-status" data-splat-status aria-live="polite">Loading Flowers…</span>
             </div>
-            <span class="interactive-status" data-splat-status aria-live="polite">Loading Flowers…</span>
-          </div>
-          <div class="splat-stage">
-            <canvas data-splat-canvas tabindex="0" aria-label="Interactive Flowers Gaussian scene"></canvas>
-            <span class="interactive-hint" data-splat-hint>Drag to orbit · Wheel to zoom · Shift + drag to pan</span>
-          </div>
-          <p class="splat-caption">The web preview keeps positions, Gaussian radius, DC colour, and opacity from the binary PLY and uses a deterministic point sample. Higher-order SH and rotations are omitted only for the compact page asset; the original PLY remains the source artifact.</p>
-        </div>
-        <div class="section-heading orbit-heading">
-          <p class="section-kicker">Rendered views</p>
-          <h3>Drag through rendered viewpoints</h3>
-          <p>For a pixel-faithful comparison, drag left or right through 72 FactorGrad-GS rendered viewpoints and use the slider for precise frame selection.</p>
-        </div>
-        <div class="interactive-viewer" data-interactive-viewer>
-          <div class="interactive-toolbar">
-            <div class="viewer-scene-switch" role="tablist" aria-label="Interactive scene">
-              <button type="button" class="is-active" data-interactive-scene="flowers" role="tab" aria-selected="true">Flowers</button>
-              <button type="button" data-interactive-scene="playroom" role="tab" aria-selected="false">Playroom</button>
-              <button type="button" data-interactive-scene="room" role="tab" aria-selected="false">Room</button>
+            <div class="splat-stage">
+              <canvas data-splat-canvas tabindex="0" aria-label="Interactive Flowers Gaussian scene"></canvas>
+              <span class="interactive-hint" data-splat-hint>Drag to orbit · Wheel to zoom · Shift + drag to pan</span>
             </div>
-            <span class="interactive-status" data-interactive-status aria-live="polite">Loading Flowers…</span>
-          </div>
-          <div class="interactive-stage">
-            <canvas id="interactive-canvas" width="960" height="632" tabindex="0" aria-label="Interactive Flowers rendered viewpoints"></canvas>
-            <span class="interactive-hint">Drag to rotate · Scroll to zoom · Arrow keys to step</span>
-          </div>
-          <div class="interactive-range-row">
-            <label for="interactive-slider">Viewpoint</label>
-            <input id="interactive-slider" type="range" min="0" max="71" value="0" step="1" aria-label="Select rendered viewpoint">
-            <output id="interactive-frame-label" for="interactive-slider">1 / 72</output>
+            <p class="splat-caption">The web preview keeps positions, Gaussian radius, DC colour, and opacity from the binary PLY and uses a deterministic point sample. Higher-order SH and rotations are omitted only for the compact page asset; the original PLY remains the source artifact.</p>
           </div>
         </div>
-        <p class="viewer-note"><strong>Data note:</strong> the supplied Flowers, Playroom, and Room PLYs are valid binary 3DGS files. The compact web assets are used here because the original Flowers PLY is over GitHub's 100 MiB per-file limit; the rendered orbit below is retained as a pixel-faithful fallback.</p>
+        <div class="viewer-mode-panel" data-viewer-panel="orbit" hidden>
+          <div class="interactive-viewer" data-interactive-viewer>
+            <div class="interactive-toolbar">
+              <div class="viewer-scene-switch" role="tablist" aria-label="Rendered scene">
+                <button type="button" class="is-active" data-interactive-scene="flowers" role="tab" aria-selected="true">Flowers</button>
+                <button type="button" data-interactive-scene="playroom" role="tab" aria-selected="false">Playroom</button>
+                <button type="button" data-interactive-scene="room" role="tab" aria-selected="false">Room</button>
+              </div>
+              <span class="interactive-status" data-interactive-status aria-live="polite">Loading Flowers…</span>
+            </div>
+            <div class="interactive-stage">
+              <canvas id="interactive-canvas" width="960" height="632" tabindex="0" aria-label="Interactive Flowers rendered viewpoints"></canvas>
+              <span class="interactive-hint">Drag to rotate · Scroll to zoom · Arrow keys to step</span>
+            </div>
+            <div class="interactive-range-row">
+              <label for="interactive-slider">Viewpoint</label>
+              <input id="interactive-slider" type="range" min="0" max="71" value="0" step="1" aria-label="Select rendered viewpoint">
+              <output id="interactive-frame-label" for="interactive-slider">1 / 72</output>
+            </div>
+          </div>
+        </div>
+        <p class="viewer-note"><strong>Data note:</strong> the supplied Flowers, Playroom, and Room PLYs are valid binary 3DGS files. The compact web assets are used here because the original Flowers PLY is over GitHub's 100 MiB per-file limit. If WebGL is unavailable, the page automatically opens the rendered-orbit tab as a fallback.</p>
       </div>
     </section>
 

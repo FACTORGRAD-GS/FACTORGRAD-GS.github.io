@@ -11,16 +11,47 @@
   const status = root.querySelector('[data-splat-status]');
   const buttons = [...root.querySelectorAll('[data-splat-scene]')];
   const hint = root.querySelector('[data-splat-hint]');
+  const modeButtons = [...document.querySelectorAll('[data-viewer-mode]')];
+  const modePanels = [...document.querySelectorAll('[data-viewer-panel]')];
+  function setViewerMode(mode) {
+    modeButtons.forEach(button => {
+      const active = button.dataset.viewerMode === mode;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-selected', String(active));
+    });
+    modePanels.forEach(panel => {
+      const active = panel.dataset.viewerPanel === mode;
+      panel.classList.toggle('is-active', active);
+      panel.hidden = !active;
+    });
+  }
+  modeButtons.forEach(button => button.addEventListener('click', () => setViewerMode(button.dataset.viewerMode)));
+  function useRenderedFallback(message) {
+    status.textContent = message;
+    setViewerMode('orbit');
+  }
   const scenes = {
     flowers: { label: 'Flowers', file: 'assets/interactive3d/flowers.fgs' },
     playroom: { label: 'Playroom', file: 'assets/interactive3d/playroom.fgs' },
     room: { label: 'Room', file: 'assets/interactive3d/room.fgs' }
   };
-  const gl = canvas.getContext('webgl', { alpha: false, antialias: true, premultipliedAlpha: false });
+  let gl = null;
+  try {
+    gl = canvas.getContext('webgl', { alpha: false, antialias: true, premultipliedAlpha: false });
+  } catch (error) {
+    console.warn('WebGL context creation failed', error);
+  }
   if (!gl) {
-    status.textContent = 'WebGL is unavailable in this browser.';
+    useRenderedFallback('3D preview unavailable; showing the rendered orbit.');
     return;
   }
+  window.addEventListener('error', event => {
+    const source = String(event.filename || '');
+    const message = String(event.message || '');
+    if (source.includes('splat-viewer.js') || /WebGL|shader|FGS preview/i.test(message)) {
+      useRenderedFallback('3D preview unavailable; showing the rendered orbit.');
+    }
+  });
 
   const vertexSource = `
     attribute vec3 a_position;
@@ -160,15 +191,15 @@
     buttons.forEach(button => { const active = button.dataset.splatScene === key; button.classList.toggle('is-active', active); button.setAttribute('aria-selected', String(active)); });
     status.textContent = `Loading ${scenes[key].label}…`;
     try {
-      const response = await fetch(scenes[key].file, { cache: 'force-cache' });
+      const response = await fetch(new URL(scenes[key].file, document.baseURI).href, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       upload(await response.arrayBuffer());
       status.textContent = `${scenes[key].label} · ${state.count.toLocaleString()} web preview Gaussians`;
       hint.textContent = 'Drag to orbit · Wheel to zoom · Shift + drag to pan';
       requestDraw();
     } catch (error) {
-      status.textContent = `${scenes[key].label} could not be loaded.`;
-      hint.textContent = 'The compact preview asset is unavailable.';
+      hint.textContent = 'The rendered orbit is available from the view switch above.';
+      useRenderedFallback('3D preview unavailable; showing the rendered orbit.');
       console.error(error);
     }
   }

@@ -15,6 +15,9 @@ for Flowers, Playroom, and Room; the page lets visitors drag through these views
 use the slider, and zoom the canvas. The `assets/interactive3d/` directory
 contains compact `.fgs` previews sampled from the supplied binary Gaussian PLYs;
 `splat-viewer.js` renders them with a dependency-free WebGL Gaussian point shader.
+The page presents the free-camera preview and the rendered orbit as two tabs in
+one interactive section; browsers without WebGL are switched to the rendered
+orbit automatically.
 
 The 3D previews keep positions, an isotropic radius, DC colour, and opacity so
 that the page remains small enough for GitHub Pages. Higher-order SH and rotation
