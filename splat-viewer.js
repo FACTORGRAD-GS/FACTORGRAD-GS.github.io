@@ -25,7 +25,6 @@
       panel.hidden = !active;
     });
   }
-  modeButtons.forEach(button => button.addEventListener('click', () => setViewerMode(button.dataset.viewerMode)));
   function useRenderedFallback(message) {
     status.textContent = message;
     setViewerMode('orbit');
@@ -36,6 +35,25 @@
     room: { label: 'Room', file: 'assets/interactive3d/room.fgs' }
   };
   let gl = null;
+  let webglReady = false;
+  const state = {
+    key: 'flowers', data: null, count: 0, center: [0, 0, 0], extent: 1,
+    yaw: 0.65, pitch: 0.18, distance: 3.0, zoom: 1, dragging: false,
+    lastX: 0, lastY: 0, raf: 0
+  };
+
+  modeButtons.forEach(button => button.addEventListener('click', () => {
+    const mode = button.dataset.viewerMode;
+    if (mode === 'splat' && !webglReady) {
+      status.textContent = '3D preview is unavailable in this browser; showing the rendered orbit.';
+      setViewerMode('orbit');
+      return;
+    }
+    setViewerMode(mode);
+    // A failed fetch previously left an empty canvas when the user switched
+    // back to this tab. Retry the active scene instead of showing stale state.
+    if (mode === 'splat' && !state.data) selectScene(state.key);
+  }));
   try {
     gl = canvas.getContext('webgl', { alpha: false, antialias: true, premultipliedAlpha: false });
   } catch (error) {
@@ -45,6 +63,11 @@
     useRenderedFallback('3D preview unavailable; showing the rendered orbit.');
     return;
   }
+  canvas.addEventListener('webglcontextlost', event => {
+    event.preventDefault();
+    webglReady = false;
+    useRenderedFallback('3D preview lost its WebGL context; showing the rendered orbit.');
+  });
   window.addEventListener('error', event => {
     const source = String(event.filename || '');
     const message = String(event.message || '');
@@ -89,30 +112,38 @@
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader));
     return shader;
   }
-  const program = gl.createProgram();
-  gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
-  gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
-  gl.useProgram(program);
-  const locations = {
-    position: gl.getAttribLocation(program, 'a_position'),
-    radius: gl.getAttribLocation(program, 'a_radius'),
-    color: gl.getAttribLocation(program, 'a_color'),
-    view: gl.getUniformLocation(program, 'u_view'),
-    projection: gl.getUniformLocation(program, 'u_projection'),
-    viewport: gl.getUniformLocation(program, 'u_viewport'),
-    pointScale: gl.getUniformLocation(program, 'u_pointScale')
-  };
-  const positionBuffer = gl.createBuffer();
-  const radiusBuffer = gl.createBuffer();
-  const colorBuffer = gl.createBuffer();
-
-  const state = {
-    key: 'flowers', data: null, count: 0, center: [0, 0, 0], extent: 1,
-    yaw: 0.65, pitch: 0.18, distance: 3.0, zoom: 1, dragging: false,
-    lastX: 0, lastY: 0, raf: 0
-  };
+  let program = null;
+  let locations = null;
+  let positionBuffer = null;
+  let radiusBuffer = null;
+  let colorBuffer = null;
+  try {
+    program = gl.createProgram();
+    gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
+    gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+    gl.useProgram(program);
+    locations = {
+      position: gl.getAttribLocation(program, 'a_position'),
+      radius: gl.getAttribLocation(program, 'a_radius'),
+      color: gl.getAttribLocation(program, 'a_color'),
+      view: gl.getUniformLocation(program, 'u_view'),
+      projection: gl.getUniformLocation(program, 'u_projection'),
+      viewport: gl.getUniformLocation(program, 'u_viewport'),
+      pointScale: gl.getUniformLocation(program, 'u_pointScale')
+    };
+    if (locations.position < 0 || locations.radius < 0 || locations.color < 0) throw new Error('WebGL attribute lookup failed');
+    positionBuffer = gl.createBuffer();
+    radiusBuffer = gl.createBuffer();
+    colorBuffer = gl.createBuffer();
+    if (!positionBuffer || !radiusBuffer || !colorBuffer) throw new Error('WebGL buffer allocation failed');
+    webglReady = true;
+  } catch (error) {
+    console.warn('WebGL preview initialization failed', error);
+    useRenderedFallback('3D preview unavailable; showing the rendered orbit.');
+    return;
+  }
 
   function identity() { return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]; }
   function perspective(fov, aspect, near, far) {
@@ -140,27 +171,34 @@
   }
   function draw() {
     state.raf = 0;
-    resize();
-    gl.clearColor(0.035, 0.11, 0.12, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    if (!state.data) return;
-    const target = state.center;
-    const cp = Math.cos(state.pitch), sp = Math.sin(state.pitch);
-    const cy = Math.cos(state.yaw), sy = Math.sin(state.yaw);
-    const eye = [target[0] + state.distance * cp * cy, target[1] + state.distance * sp, target[2] + state.distance * cp * sy];
-    const view = lookAt(eye, target, [0, 1, 0]);
-    const aspect = canvas.width / Math.max(1, canvas.height);
-    const projection = perspective(0.76, aspect, Math.max(0.001, state.extent * 0.003), state.extent * 30);
-    gl.useProgram(program);
-    gl.uniformMatrix4fv(locations.view, false, new Float32Array(view));
-    gl.uniformMatrix4fv(locations.projection, false, new Float32Array(projection));
-    gl.uniform2f(locations.viewport, canvas.width, canvas.height);
-    gl.uniform1f(locations.pointScale, state.extent * 0.72 * state.zoom);
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); gl.enableVertexAttribArray(locations.position); gl.vertexAttribPointer(locations.position, 3, gl.FLOAT, false, 16, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, radiusBuffer); gl.enableVertexAttribArray(locations.radius); gl.vertexAttribPointer(locations.radius, 1, gl.FLOAT, false, 4, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer); gl.enableVertexAttribArray(locations.color); gl.vertexAttribPointer(locations.color, 4, gl.UNSIGNED_BYTE, true, 4, 0);
-    gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.disable(gl.DEPTH_TEST);
-    gl.drawArrays(gl.POINTS, 0, state.count);
+    try {
+      resize();
+      gl.clearColor(0.035, 0.11, 0.12, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      if (!state.data) return;
+      const target = state.center;
+      const cp = Math.cos(state.pitch), sp = Math.sin(state.pitch);
+      const cy = Math.cos(state.yaw), sy = Math.sin(state.yaw);
+      const eye = [target[0] + state.distance * cp * cy, target[1] + state.distance * sp, target[2] + state.distance * cp * sy];
+      const view = lookAt(eye, target, [0, 1, 0]);
+      const aspect = canvas.width / Math.max(1, canvas.height);
+      const projection = perspective(0.76, aspect, Math.max(0.001, state.extent * 0.003), state.extent * 30);
+      gl.useProgram(program);
+      gl.uniformMatrix4fv(locations.view, false, new Float32Array(view));
+      gl.uniformMatrix4fv(locations.projection, false, new Float32Array(projection));
+      gl.uniform2f(locations.viewport, canvas.width, canvas.height);
+      gl.uniform1f(locations.pointScale, state.extent * 0.72 * state.zoom);
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); gl.enableVertexAttribArray(locations.position); gl.vertexAttribPointer(locations.position, 3, gl.FLOAT, false, 16, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, radiusBuffer); gl.enableVertexAttribArray(locations.radius); gl.vertexAttribPointer(locations.radius, 1, gl.FLOAT, false, 4, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer); gl.enableVertexAttribArray(locations.color); gl.vertexAttribPointer(locations.color, 4, gl.UNSIGNED_BYTE, true, 4, 0);
+      gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.disable(gl.DEPTH_TEST);
+      gl.drawArrays(gl.POINTS, 0, state.count);
+      if (gl.getError() !== gl.NO_ERROR) throw new Error('WebGL draw failed');
+    } catch (error) {
+      webglReady = false;
+      console.warn('WebGL preview draw failed', error);
+      useRenderedFallback('3D preview could not be drawn; showing the rendered orbit.');
+    }
   }
   function requestDraw() { if (!state.raf) state.raf = requestAnimationFrame(draw); }
 
@@ -187,6 +225,10 @@
   }
   async function selectScene(key) {
     if (!scenes[key]) return;
+    if (!webglReady) {
+      useRenderedFallback('3D preview unavailable in this browser; showing the rendered orbit.');
+      return;
+    }
     state.key = key; state.data = null;
     buttons.forEach(button => { const active = button.dataset.splatScene === key; button.classList.toggle('is-active', active); button.setAttribute('aria-selected', String(active)); });
     status.textContent = `Loading ${scenes[key].label}…`;
