@@ -43,12 +43,27 @@
             <a class="button button-secondary" href="https://github.com/FACTORGRAD-GS/FactorGrad-GS" target="_blank" rel="noopener">View code <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <figure class="paper-figure hero-figure">
-          <a href="assets/teaser-highlight.svg" target="_blank" rel="noopener" aria-label="Open full-size teaser figure">
-            <img src="assets/teaser-highlight.svg" alt="Flowers comparison with white dashed detail boxes outlined by a dark halo, novel views, and training speedups." width="1000" height="565" fetchpriority="high">
-          </a>
-          <figcaption>Latest Figure 1 from the manuscript. White dashed detail boxes use a dark halo so the highlighted differences remain visible on both bright and dark regions.</figcaption>
-        </figure>
+        <div class="hero-gallery-heading" id="scenes">
+          <p class="section-kicker">Visual evidence</p>
+          <h2 id="scenes-heading">Browse every evaluated scene</h2>
+          <p>Explore FactorGrad-GS renders across all 13 evaluated scenes.</p>
+        </div>
+        <div class="scene-grid hero-scene-grid" aria-labelledby="scenes-heading">
+          <figure class="scene-card"><img src="assets/scenes/bicycle.gif" alt="Bicycle scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Bicycle</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/bonsai.gif" alt="Bonsai scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Bonsai</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/counter.gif" alt="Counter scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Counter</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/drjohnson.gif" alt="Dr Johnson scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Dr Johnson</strong><span>Deep Blending</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/flowers.gif" alt="Flowers scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Flowers</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/garden.gif" alt="Garden scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Garden</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/kitchen.gif" alt="Kitchen scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Kitchen</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/playroom.gif" alt="Playroom scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Playroom</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/room.gif" alt="Room scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Room</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/stump.gif" alt="Stump scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Stump</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/train.gif" alt="Train scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Train</strong><span>Tanks &amp; Temples</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/treehill.gif" alt="Treehill scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Treehill</strong><span>Mip-NeRF 360</span></figcaption></figure>
+          <figure class="scene-card"><img src="assets/scenes/truck.gif" alt="Truck scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Truck</strong><span>Tanks &amp; Temples</span></figcaption></figure>
+        </div>
+        <p class="visual-note hero-visual-note">The GIFs are derived from the supplied visualization renders.</p>
       </div>
     </section>
 
@@ -135,25 +150,15 @@
       <div class="container">
         <div class="section-heading">
           <p class="section-kicker">Visual evidence</p>
-          <h2 id="visuals-heading">Browse every evaluated scene</h2>
-          <p>Each scene below is a lightweight 360-degree GIF rendered with FactorGrad-GS. Use the frame comparison to inspect matched views and close-up crops for five representative scenes.</p>
+          <h2 id="visuals-heading">Appearance and training efficiency</h2>
+          <p>Figure 1 combines aligned appearance comparisons and training speedups. Use the frame comparison below to inspect matched views and close-up crops for five representative scenes.</p>
         </div>
-        <div class="scene-grid">
-          <figure class="scene-card"><img src="assets/scenes/bicycle.gif" alt="Bicycle scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Bicycle</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/bonsai.gif" alt="Bonsai scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Bonsai</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/counter.gif" alt="Counter scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Counter</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/drjohnson.gif" alt="Dr Johnson scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Dr Johnson</strong><span>Deep Blending</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/flowers.gif" alt="Flowers scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Flowers</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/garden.gif" alt="Garden scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Garden</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/kitchen.gif" alt="Kitchen scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Kitchen</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/playroom.gif" alt="Playroom scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Playroom</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/room.gif" alt="Room scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Room</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/stump.gif" alt="Stump scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Stump</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/train.gif" alt="Train scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Train</strong><span>Tanks & Temples</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/treehill.gif" alt="Treehill scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Treehill</strong><span>Mip-NeRF 360</span></figcaption></figure>
-          <figure class="scene-card"><img src="assets/scenes/truck.gif" alt="Truck scene: FactorGrad-GS 360-degree rendered view." loading="lazy"><figcaption><strong>Truck</strong><span>Tanks & Temples</span></figcaption></figure>
-        </div>
-        <p class="visual-note">The GIFs are derived from the supplied visualization renders and are loaded lazily so the page stays responsive.</p>
+        <figure class="paper-figure teaser-figure">
+          <a href="assets/teaser-highlight.svg" target="_blank" rel="noopener" aria-label="Open full-size teaser figure">
+            <img src="assets/teaser-highlight.svg" alt="Flowers comparison with white dashed detail boxes outlined by a dark halo, novel views, and training speedups." width="1000" height="565" loading="lazy">
+          </a>
+          <figcaption>Latest Figure 1 from the manuscript. White dashed detail boxes use a dark halo so the highlighted differences remain visible on both bright and dark regions.</figcaption>
+        </figure>
 
         <div class="comparison" aria-labelledby="comparison-heading">
           <div class="comparison-heading">

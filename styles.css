@@ -73,6 +73,12 @@ h1 small { display: block; max-width: 940px; margin-top: .8rem; color: #e6f3ef; 
 .paper-figure img { display: block; width: 100%; height: auto; }
 .paper-figure figcaption { padding: .8rem 1.1rem 1rem; border-top: 1px solid #e4ecea; color: var(--muted); font-size: .88rem; }
 .hero-figure { margin-top: clamp(3.1rem, 6vw, 5.3rem); }
+.hero-gallery-heading { margin-top: clamp(3.1rem, 6vw, 5.3rem); margin-bottom: 1.5rem; }
+.hero-gallery-heading .section-kicker { color: #a7d8cb; }
+.hero-gallery-heading h2 { margin-bottom: .6rem; font-size: clamp(1.8rem, 3.2vw, 2.6rem); line-height: 1.18; letter-spacing: -.035em; }
+.hero-gallery-heading p:last-child { margin-bottom: 0; color: #bed3d1; }
+.hero-scene-grid { color: var(--ink); }
+.hero .hero-visual-note { color: #bed3d1; }
 
 .section { padding-block: clamp(4rem, 7vw, 6.5rem); }
 .section-heading { max-width: 790px; margin-bottom: 2.5rem; }
